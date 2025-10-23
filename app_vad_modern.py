@@ -130,12 +130,6 @@ if 'running' not in st.session_state:
 if 'stopped' not in st.session_state:
     st.session_state['stopped'] = False
 
-# Auto-refresh for continuous scrolling when running
-if st.session_state.get('running', True) and not st.session_state.get('stopped', False):
-    import time
-    time.sleep(0.5)  # Update every 0.5 seconds
-    st.rerun()
-
 st.markdown("---")
 
 # =======================
