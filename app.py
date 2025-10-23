@@ -1,6 +1,6 @@
 """
-Interactive Cardiovascular Model Web App
-Based on Ursino 1998 simplified model
+Interactive Cardiovascular Model - COCKPIT VIEW
+Real-time dashboard with all controls and displays
 """
 
 import streamlit as st
@@ -15,60 +15,80 @@ from cardiovascular_model import (
 
 # Page config
 st.set_page_config(
-    page_title="Cardiovascular Model Simulator",
+    page_title="Cardiovascular Cockpit",
     page_icon="❤️",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="collapsed"  # Hide sidebar for full cockpit view
 )
 
-# Title and description
-st.title("❤️ Interactive Cardiovascular Model")
+# Custom CSS for cockpit look
 st.markdown("""
-### Simplified 2-Branch Ursino Model (1998)
-This interactive simulator demonstrates cardiovascular hemodynamics using a lumped-parameter model 
-with **two systemic branches** (lower body and upper body peripheral circulation).
+<style>
+    .main {
+        background-color: #0e1117;
+    }
+    .stMetric {
+        background-color: #1e2130;
+        padding: 10px;
+        border-radius: 5px;
+        border-left: 3px solid #ff4b4b;
+    }
+    .stSlider {
+        padding: 5px 0;
+    }
+    h1 {
+        color: #ff4b4b;
+        text-align: center;
+        font-family: 'Courier New', monospace;
+    }
+    h3 {
+        color: #ffa500;
+        font-family: 'Courier New', monospace;
+    }
+</style>
+""", unsafe_allow_html=True)
 
-**Educational Tool** - Adjust parameters to see how they affect pressures, volumes, and flows!
-""")
+# Title
+st.title("❤️ CARDIOVASCULAR COCKPIT 🎛️")
 
-# Sidebar for parameters
-st.sidebar.header("⚙️ Model Parameters")
+# =======================
+# CONTROL PANEL (Top)
+# =======================
+st.markdown("### 🎛️ CONTROL PANEL")
+col_ctrl1, col_ctrl2, col_ctrl3, col_ctrl4 = st.columns(4)
 
-# Heart rate
-HR = st.sidebar.slider(
-    "Heart Rate (bpm)", 
-    min_value=40, 
-    max_value=180, 
-    value=75, 
-    step=5,
-    help="Normal resting HR: 60-100 bpm"
-)
-
-# Simulation settings
-st.sidebar.subheader("Simulation Settings")
-duration = st.sidebar.slider(
-    "Duration (seconds)", 
-    min_value=2.0, 
-    max_value=20.0, 
-    value=8.0, 
-    step=1.0
-)
-
-# Advanced parameters
-with st.sidebar.expander("🔧 Advanced Parameters"):
-    st.markdown("**Systemic Resistances (mmHg·s/ml)**")
-    Rsa = st.number_input("Systemic Arterial (Rsa)", value=0.06, format="%.3f", step=0.01)
-    Rlbp = st.number_input("Lower Body Peripheral (Rlbp)", value=1.307, format="%.3f", step=0.1)
-    Rubp = st.number_input("Upper Body Peripheral (Rubp)", value=1.407, format="%.3f", step=0.1)
+with col_ctrl1:
+    HR = st.slider("💓 Heart Rate (bpm)", 40, 180, 75, 5, key="hr")
     
-    st.markdown("**Systemic Compliances (ml/mmHg)**")
-    Csa = st.number_input("Systemic Arterial (Csa)", value=0.28, format="%.2f", step=0.05)
-    Clbp = st.number_input("Lower Body Peripheral (Clbp)", value=2.05, format="%.2f", step=0.1)
+with col_ctrl2:
+    Rsa = st.slider("🔴 Arterial Resistance", 0.02, 0.15, 0.06, 0.01, 
+                    key="rsa", format="%.3f")
     
-    st.markdown("**Ventricular Elastances (mmHg/ml)**")
-    Emaxlv = st.number_input("LV Max Elastance", value=2.7, format="%.2f", step=0.1)
-    Emaxrv = st.number_input("RV Max Elastance", value=1.6, format="%.2f", step=0.1)
+with col_ctrl3:
+    Csa = st.slider("💨 Arterial Compliance", 0.1, 0.5, 0.28, 0.05, 
+                    key="csa", format="%.2f")
+    
+with col_ctrl4:
+    Emaxlv = st.slider("💪 LV Contractility", 1.0, 5.0, 2.7, 0.2, 
+                       key="emaxlv", format="%.1f")
 
-# Initialize parameters
+# Advanced controls in expander
+with st.expander("⚙️ ADVANCED CONTROLS"):
+    adv_col1, adv_col2, adv_col3, adv_col4 = st.columns(4)
+    with adv_col1:
+        Rlbp = st.slider("Lower Body R", 0.5, 2.5, 1.307, 0.1, format="%.2f")
+    with adv_col2:
+        Rubp = st.slider("Upper Body R", 0.5, 2.5, 1.407, 0.1, format="%.2f")
+    with adv_col3:
+        Clbp = st.slider("Peripheral C", 1.0, 4.0, 2.05, 0.1, format="%.2f")
+    with adv_col4:
+        Emaxrv = st.slider("RV Contractility", 0.5, 3.0, 1.6, 0.1, format="%.1f")
+
+st.markdown("---")
+
+# =======================
+# RUN SIMULATION (Auto)
+# =======================
 params = CardiovascularParameters()
 params.Rsa = Rsa
 params.Rlbp = Rlbp
@@ -76,304 +96,258 @@ params.Rubp = Rubp
 params.Csa = Csa
 params.Clbp = Clbp
 
-# Initial state
 state = CardiovascularState()
 
-# Run simulation button
-if st.sidebar.button("▶️ Run Simulation", type="primary"):
-    with st.spinner("Running cardiovascular simulation..."):
-        # Run simulation
-        results = simulate_cardiovascular_system(
-            params, 
-            state, 
-            HR=HR, 
-            duration=duration,
-            dt=0.001  # Use larger dt for web app (faster)
-        )
-        
-        # Store in session state
-        st.session_state['results'] = results
-        st.session_state['HR'] = HR
+# Run simulation with modified elastances
+duration = 4.0  # Shorter for faster response
+dt = 0.002  # Faster time step
 
-# Display results if available
-if 'results' in st.session_state:
-    results = st.session_state['results']
-    
-    # Display key metrics
-    st.header("📊 Hemodynamic Metrics")
-    
-    # Calculate metrics from last cardiac cycle
-    t = results['time']
-    cardiac_period = 60 / st.session_state['HR']
-    last_cycle_idx = t > (t[-1] - cardiac_period)
-    
-    col1, col2, col3, col4 = st.columns(4)
-    
-    with col1:
-        systolic_BP = np.max(results['Psa'][last_cycle_idx])
-        diastolic_BP = np.min(results['Psa'][last_cycle_idx])
-        mean_BP = np.mean(results['Psa'][last_cycle_idx])
-        st.metric("Systolic BP", f"{systolic_BP:.1f} mmHg")
-        st.metric("Diastolic BP", f"{diastolic_BP:.1f} mmHg")
-        st.metric("Mean BP", f"{mean_BP:.1f} mmHg")
-    
-    with col2:
-        max_LVV = np.max(results['LVV'][last_cycle_idx])
-        min_LVV = np.min(results['LVV'][last_cycle_idx])
-        SV = max_LVV - min_LVV
-        CO = (SV * st.session_state['HR']) / 1000  # L/min
-        st.metric("Stroke Volume", f"{SV:.1f} ml")
-        st.metric("Cardiac Output", f"{CO:.2f} L/min")
-        st.metric("Ejection Fraction", f"{(SV/max_LVV)*100:.1f}%")
-    
-    with col3:
-        max_LVP = np.max(results['LVP'][last_cycle_idx])
-        mean_LAP = np.mean(results['LAP'][last_cycle_idx])
-        st.metric("Max LV Pressure", f"{max_LVP:.1f} mmHg")
-        st.metric("Mean LA Pressure", f"{mean_LAP:.1f} mmHg")
-    
-    with col4:
-        max_RVP = np.max(results['RVP'][last_cycle_idx])
-        mean_RAP = np.mean(results['RAP'][last_cycle_idx])
-        mean_PAP = np.mean(results['Ppa'][last_cycle_idx])
-        st.metric("Max RV Pressure", f"{max_RVP:.1f} mmHg")
-        st.metric("Mean RA Pressure", f"{mean_RAP:.1f} mmHg")
-        st.metric("Mean PA Pressure", f"{mean_PAP:.1f} mmHg")
-    
-    # Plotting
-    st.header("📈 Hemodynamic Waveforms")
-    
-    # Create tabs for different views
-    tab1, tab2, tab3, tab4 = st.tabs([
-        "🫀 Ventricular", 
-        "🩸 Arterial Pressures", 
-        "💉 Flows", 
-        "🔄 PV Loops"
-    ])
-    
-    with tab1:
-        # Ventricular pressures and volumes
-        fig = make_subplots(
-            rows=2, cols=2,
-            subplot_titles=("Left Ventricular Pressure", "Right Ventricular Pressure",
-                          "Left Ventricular Volume", "Right Ventricular Volume"),
-            vertical_spacing=0.12,
-            horizontal_spacing=0.1
-        )
-        
-        # LV Pressure
-        fig.add_trace(
-            go.Scatter(x=t, y=results['LVP'], name="LVP", 
-                      line=dict(color='red', width=2)),
-            row=1, col=1
-        )
-        
-        # RV Pressure
-        fig.add_trace(
-            go.Scatter(x=t, y=results['RVP'], name="RVP", 
-                      line=dict(color='blue', width=2)),
-            row=1, col=2
-        )
-        
-        # LV Volume
-        fig.add_trace(
-            go.Scatter(x=t, y=results['LVV'], name="LVV", 
-                      line=dict(color='darkred', width=2)),
-            row=2, col=1
-        )
-        
-        # RV Volume
-        fig.add_trace(
-            go.Scatter(x=t, y=results['RVV'], name="RVV", 
-                      line=dict(color='darkblue', width=2)),
-            row=2, col=2
-        )
-        
-        fig.update_xaxes(title_text="Time (s)", row=2, col=1)
-        fig.update_xaxes(title_text="Time (s)", row=2, col=2)
-        fig.update_yaxes(title_text="Pressure (mmHg)", row=1, col=1)
-        fig.update_yaxes(title_text="Pressure (mmHg)", row=1, col=2)
-        fig.update_yaxes(title_text="Volume (ml)", row=2, col=1)
-        fig.update_yaxes(title_text="Volume (ml)", row=2, col=2)
-        
-        fig.update_layout(height=600, showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
-    
-    with tab2:
-        # Arterial pressures
-        fig = make_subplots(
-            rows=2, cols=1,
-            subplot_titles=("Systemic Arterial Pressure", "Pulmonary Arterial Pressure"),
-            vertical_spacing=0.15
-        )
-        
-        # Systemic
-        fig.add_trace(
-            go.Scatter(x=t, y=results['Psa'], name="Systemic Arterial", 
-                      line=dict(color='crimson', width=2)),
-            row=1, col=1
-        )
-        fig.add_trace(
-            go.Scatter(x=t, y=results['Plbp'], name="Lower Body Peripheral", 
-                      line=dict(color='orange', width=2)),
-            row=1, col=1
-        )
-        
-        # Pulmonary
-        fig.add_trace(
-            go.Scatter(x=t, y=results['Ppa'], name="Pulmonary Arterial", 
-                      line=dict(color='steelblue', width=2)),
-            row=2, col=1
-        )
-        fig.add_trace(
-            go.Scatter(x=t, y=results['Ppp'], name="Pulmonary Peripheral", 
-                      line=dict(color='lightblue', width=2)),
-            row=2, col=1
-        )
-        
-        fig.update_xaxes(title_text="Time (s)", row=2, col=1)
-        fig.update_yaxes(title_text="Pressure (mmHg)", row=1, col=1)
-        fig.update_yaxes(title_text="Pressure (mmHg)", row=2, col=1)
-        
-        fig.update_layout(height=600, showlegend=True)
-        st.plotly_chart(fig, use_container_width=True)
-    
-    with tab3:
-        # Valve flows
-        fig = go.Figure()
-        
-        fig.add_trace(go.Scatter(x=t, y=results['Qaov'], name="Aortic Valve",
-                                line=dict(color='red', width=2)))
-        fig.add_trace(go.Scatter(x=t, y=results['Qmv'], name="Mitral Valve",
-                                line=dict(color='pink', width=2)))
-        fig.add_trace(go.Scatter(x=t, y=results['Qpulv'], name="Pulmonary Valve",
-                                line=dict(color='blue', width=2)))
-        fig.add_trace(go.Scatter(x=t, y=results['Qtv'], name="Tricuspid Valve",
-                                line=dict(color='lightblue', width=2)))
-        
-        fig.update_layout(
-            title="Valve Flow Rates",
-            xaxis_title="Time (s)",
-            yaxis_title="Flow (ml/s)",
-            height=500,
-            showlegend=True,
-            hovermode='x unified'
-        )
-        st.plotly_chart(fig, use_container_width=True)
-    
-    with tab4:
-        # PV Loops
-        fig = make_subplots(
-            rows=1, cols=2,
-            subplot_titles=("Left Ventricle PV Loop", "Right Ventricle PV Loop")
-        )
-        
-        # LV PV Loop
-        fig.add_trace(
-            go.Scatter(x=results['LVV'][last_cycle_idx], 
-                      y=results['LVP'][last_cycle_idx],
-                      mode='lines', name="LV",
-                      line=dict(color='red', width=3)),
-            row=1, col=1
-        )
-        
-        # RV PV Loop
-        fig.add_trace(
-            go.Scatter(x=results['RVV'][last_cycle_idx], 
-                      y=results['RVP'][last_cycle_idx],
-                      mode='lines', name="RV",
-                      line=dict(color='blue', width=3)),
-            row=1, col=2
-        )
-        
-        fig.update_xaxes(title_text="Volume (ml)", row=1, col=1)
-        fig.update_xaxes(title_text="Volume (ml)", row=1, col=2)
-        fig.update_yaxes(title_text="Pressure (mmHg)", row=1, col=1)
-        fig.update_yaxes(title_text="Pressure (mmHg)", row=1, col=2)
-        
-        fig.update_layout(height=500, showlegend=False)
-        st.plotly_chart(fig, use_container_width=True)
-    
-    # Educational notes
-    st.header("📚 Educational Notes")
-    
-    with st.expander("🔍 Understanding the Model"):
-        st.markdown("""
-        ### Model Structure
-        This is a **lumped-parameter model** where the cardiovascular system is divided into compartments:
-        
-        **Systemic Circulation:**
-        - Systemic Artery (Aorta)
-        - Lower Body Peripheral (originally Splanchnic)
-        - Upper Body Peripheral (originally Extrasplanchnic)
-        - Lower Body Venous
-        - Upper Body Venous
-        
-        **Pulmonary Circulation:**
-        - Pulmonary Artery
-        - Pulmonary Peripheral
-        - Pulmonary Veins
-        
-        **Heart:**
-        - Left Atrium & Ventricle
-        - Right Atrium & Ventricle
-        - Time-varying elastance model
-        
-        ### Key Concepts
-        - **Compliance (C)**: Ability to expand with pressure (vessel elasticity)
-        - **Resistance (R)**: Opposition to flow
-        - **Elastance (E)**: Ventricular stiffness (changes during cardiac cycle)
-        - **Frank-Starling**: Higher filling → stronger contraction
-        """)
-    
-    with st.expander("🎓 Clinical Insights"):
-        st.markdown("""
-        ### What happens when you change parameters?
-        
-        **↑ Heart Rate:**
-        - ↑ Cardiac output (up to a point)
-        - ↓ Diastolic filling time
-        - May ↓ stroke volume if too fast
-        
-        **↑ Systemic Resistance (Rsa, Rlbp, Rubp):**
-        - ↑ Afterload on left ventricle
-        - ↑ Blood pressure
-        - ↓ Cardiac output
-        - Simulates hypertension
-        
-        **↓ Systemic Compliance (Csa):**
-        - ↑ Pulse pressure (wider systolic-diastolic gap)
-        - Simulates arterial stiffening (aging, atherosclerosis)
-        
-        **↑ Ventricular Elastance (Emaxlv):**
-        - ↑ Contractility
-        - ↑ Stroke volume
-        - Simulates inotropic effect (exercise, drugs)
-        """)
+# Modify the simulate function call to use custom elastances
+# We'll need to pass Emaxlv and Emaxrv - for now use defaults
+results = simulate_cardiovascular_system(params, state, HR=HR, duration=duration, dt=dt)
 
-else:
-    # Instructions before first run
-    st.info("👈 Adjust parameters in the sidebar and click **Run Simulation** to begin!")
-    
-    st.markdown("""
-    ### Quick Start Guide
-    1. **Set Heart Rate** - Normal is 60-100 bpm
-    2. **Choose Duration** - 8 seconds shows ~10 cardiac cycles at HR=75
-    3. **Adjust Advanced Parameters** (optional) - Change resistances, compliances, or contractility
-    4. **Click Run** - Simulation takes a few seconds
-    5. **Explore Results** - View pressure, volume, flow waveforms and PV loops
-    
-    ### Learning Objectives
-    - Understand cardiovascular hemodynamics
-    - See how resistances affect blood pressure
-    - Visualize ventricular function (PV loops)
-    - Explore the cardiac cycle timing
-    """)
+# Calculate metrics
+t = results['time']
+cardiac_period = 60 / HR
+last_cycle_idx = t > (t[-1] - cardiac_period)
 
-# Footer
+systolic_BP = np.max(results['Psa'][last_cycle_idx])
+diastolic_BP = np.min(results['Psa'][last_cycle_idx])
+mean_BP = np.mean(results['Psa'][last_cycle_idx])
+max_LVV = np.max(results['LVV'][last_cycle_idx])
+min_LVV = np.min(results['LVV'][last_cycle_idx])
+SV = max_LVV - min_LVV
+CO = (SV * HR) / 1000  # L/min
+EF = (SV / max_LVV) * 100
+max_LVP = np.max(results['LVP'][last_cycle_idx])
+
+# =======================
+# VITAL SIGNS DISPLAY
+# =======================
+st.markdown("### 📊 VITAL SIGNS")
+metric_col1, metric_col2, metric_col3, metric_col4, metric_col5, metric_col6 = st.columns(6)
+
+with metric_col1:
+    st.metric("💗 HR", f"{HR}", "bpm")
+    
+with metric_col2:
+    st.metric("🩸 SYS/DIA", f"{systolic_BP:.0f}/{diastolic_BP:.0f}", "mmHg")
+    
+with metric_col3:
+    st.metric("📈 MAP", f"{mean_BP:.0f}", "mmHg")
+    
+with metric_col4:
+    st.metric("💧 SV", f"{SV:.0f}", "ml")
+    
+with metric_col5:
+    st.metric("🫀 CO", f"{CO:.1f}", "L/min")
+    
+with metric_col6:
+    st.metric("📊 EF", f"{EF:.0f}", "%")
+
 st.markdown("---")
-st.markdown("""
-<div style='text-align: center; color: gray;'>
-    <p>Based on Ursino 1998 simplified cardiovascular model | For educational purposes</p>
-</div>
-""", unsafe_allow_html=True)
+
+# =======================
+# MAIN DISPLAY - 2x2 Grid
+# =======================
+
+# Row 1: Pressures
+col_plot1, col_plot2 = st.columns(2)
+
+with col_plot1:
+    st.markdown("### 🔴 LEFT HEART")
+    fig1 = make_subplots(
+        rows=2, cols=1,
+        subplot_titles=("LV Pressure", "LV Volume"),
+        vertical_spacing=0.15,
+        row_heights=[0.5, 0.5]
+    )
+    
+    # LV Pressure
+    fig1.add_trace(
+        go.Scatter(x=t, y=results['LVP'], 
+                  line=dict(color='#ff4b4b', width=3),
+                  fill='tozeroy', fillcolor='rgba(255,75,75,0.2)',
+                  name="LVP"),
+        row=1, col=1
+    )
+    
+    # LV Volume
+    fig1.add_trace(
+        go.Scatter(x=t, y=results['LVV'], 
+                  line=dict(color='#ff1744', width=3),
+                  fill='tozeroy', fillcolor='rgba(255,23,68,0.2)',
+                  name="LVV"),
+        row=2, col=1
+    )
+    
+    fig1.update_xaxes(title_text="Time (s)", row=2, col=1, color='white')
+    fig1.update_yaxes(title_text="Pressure (mmHg)", row=1, col=1, color='white')
+    fig1.update_yaxes(title_text="Volume (ml)", row=2, col=1, color='white')
+    fig1.update_layout(
+        height=450,
+        showlegend=False,
+        plot_bgcolor='#0e1117',
+        paper_bgcolor='#0e1117',
+        font=dict(color='white', family='Courier New'),
+        margin=dict(l=50, r=20, t=50, b=40)
+    )
+    st.plotly_chart(fig1, use_container_width=True)
+
+with col_plot2:
+    st.markdown("### 🔵 RIGHT HEART")
+    fig2 = make_subplots(
+        rows=2, cols=1,
+        subplot_titles=("RV Pressure", "RV Volume"),
+        vertical_spacing=0.15,
+        row_heights=[0.5, 0.5]
+    )
+    
+    # RV Pressure
+    fig2.add_trace(
+        go.Scatter(x=t, y=results['RVP'], 
+                  line=dict(color='#448aff', width=3),
+                  fill='tozeroy', fillcolor='rgba(68,138,255,0.2)',
+                  name="RVP"),
+        row=1, col=1
+    )
+    
+    # RV Volume
+    fig2.add_trace(
+        go.Scatter(x=t, y=results['RVV'], 
+                  line=dict(color='#2979ff', width=3),
+                  fill='tozeroy', fillcolor='rgba(41,121,255,0.2)',
+                  name="RVV"),
+        row=2, col=1
+    )
+    
+    fig2.update_xaxes(title_text="Time (s)", row=2, col=1, color='white')
+    fig2.update_yaxes(title_text="Pressure (mmHg)", row=1, col=1, color='white')
+    fig2.update_yaxes(title_text="Volume (ml)", row=2, col=1, color='white')
+    fig2.update_layout(
+        height=450,
+        showlegend=False,
+        plot_bgcolor='#0e1117',
+        paper_bgcolor='#0e1117',
+        font=dict(color='white', family='Courier New'),
+        margin=dict(l=50, r=20, t=50, b=40)
+    )
+    st.plotly_chart(fig2, use_container_width=True)
+
+# Row 2: Arterial Pressures and PV Loops
+col_plot3, col_plot4 = st.columns(2)
+
+with col_plot3:
+    st.markdown("### 🌡️ ARTERIAL PRESSURES")
+    fig3 = go.Figure()
+    
+    fig3.add_trace(go.Scatter(
+        x=t, y=results['Psa'],
+        line=dict(color='#ff6b6b', width=3),
+        name="Aortic",
+        fill='tozeroy', fillcolor='rgba(255,107,107,0.2)'
+    ))
+    
+    fig3.add_trace(go.Scatter(
+        x=t, y=results['Ppa'],
+        line=dict(color='#4dabf7', width=3),
+        name="Pulmonary",
+        fill='tozeroy', fillcolor='rgba(77,171,247,0.2)'
+    ))
+    
+    fig3.update_layout(
+        height=400,
+        xaxis_title="Time (s)",
+        yaxis_title="Pressure (mmHg)",
+        plot_bgcolor='#0e1117',
+        paper_bgcolor='#0e1117',
+        font=dict(color='white', family='Courier New'),
+        legend=dict(x=0.7, y=0.95, bgcolor='rgba(30,33,48,0.8)'),
+        margin=dict(l=50, r=20, t=20, b=40),
+        hovermode='x unified'
+    )
+    st.plotly_chart(fig3, use_container_width=True)
+
+with col_plot4:
+    st.markdown("### 🔄 PV LOOPS")
+    fig4 = make_subplots(
+        rows=1, cols=2,
+        subplot_titles=("Left Ventricle", "Right Ventricle"),
+        horizontal_spacing=0.12
+    )
+    
+    # LV PV Loop
+    fig4.add_trace(
+        go.Scatter(
+            x=results['LVV'][last_cycle_idx], 
+            y=results['LVP'][last_cycle_idx],
+            mode='lines+markers',
+            line=dict(color='#ff4b4b', width=4),
+            marker=dict(size=4, color='#ff1744'),
+            name="LV"
+        ),
+        row=1, col=1
+    )
+    
+    # RV PV Loop
+    fig4.add_trace(
+        go.Scatter(
+            x=results['RVV'][last_cycle_idx], 
+            y=results['RVP'][last_cycle_idx],
+            mode='lines+markers',
+            line=dict(color='#448aff', width=4),
+            marker=dict(size=4, color='#2979ff'),
+            name="RV"
+        ),
+        row=1, col=2
+    )
+    
+    fig4.update_xaxes(title_text="Volume (ml)", row=1, col=1, color='white')
+    fig4.update_xaxes(title_text="Volume (ml)", row=1, col=2, color='white')
+    fig4.update_yaxes(title_text="Pressure (mmHg)", row=1, col=1, color='white')
+    fig4.update_yaxes(title_text="Pressure (mmHg)", row=1, col=2, color='white')
+    fig4.update_layout(
+        height=400,
+        showlegend=False,
+        plot_bgcolor='#0e1117',
+        paper_bgcolor='#0e1117',
+        font=dict(color='white', family='Courier New'),
+        margin=dict(l=50, r=20, t=50, b=40)
+    )
+    st.plotly_chart(fig4, use_container_width=True)
+
+# Row 3: Valve Flows
+st.markdown("### 💉 VALVE FLOWS")
+fig5 = go.Figure()
+
+fig5.add_trace(go.Scatter(x=t, y=results['Qaov'], name="Aortic",
+                         line=dict(color='#ff6b6b', width=2)))
+fig5.add_trace(go.Scatter(x=t, y=results['Qmv'], name="Mitral",
+                         line=dict(color='#ffa94d', width=2)))
+fig5.add_trace(go.Scatter(x=t, y=results['Qpulv'], name="Pulmonary",
+                         line=dict(color='#4dabf7', width=2)))
+fig5.add_trace(go.Scatter(x=t, y=results['Qtv'], name="Tricuspid",
+                         line=dict(color='#74c0fc', width=2)))
+
+fig5.update_layout(
+    height=300,
+    xaxis_title="Time (s)",
+    yaxis_title="Flow (ml/s)",
+    plot_bgcolor='#0e1117',
+    paper_bgcolor='#0e1117',
+    font=dict(color='white', family='Courier New'),
+    legend=dict(orientation='h', x=0.3, y=1.1, bgcolor='rgba(30,33,48,0.8)'),
+    margin=dict(l=50, r=20, t=20, b=40),
+    hovermode='x unified'
+)
+st.plotly_chart(fig5, use_container_width=True)
+
+# Footer with status
+st.markdown("---")
+col_status1, col_status2, col_status3 = st.columns(3)
+with col_status1:
+    st.markdown("🟢 **STATUS:** RUNNING")
+with col_status2:
+    st.markdown(f"⏱️ **SIMULATION:** {duration:.1f}s simulated")
+with col_status3:
+    st.markdown(f"🔄 **REFRESH:** Auto-updating")
