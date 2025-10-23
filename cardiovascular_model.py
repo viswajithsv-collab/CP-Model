@@ -274,7 +274,11 @@ def simulate_cardiovascular_system(params: CardiovascularParameters,
                                    state: CardiovascularState,
                                    HR: float = 75.0,
                                    duration: float = 16.0,
-                                   dt: float = 0.0001) -> dict:
+                                   dt: float = 0.0001,
+                                   Emaxlv: float = 2.7,
+                                   Eminlv: float = 0.06,
+                                   Emaxrv: float = 1.6,
+                                   Eminrv: float = 0.08) -> dict:
     """
     Run cardiovascular simulation
     
@@ -305,11 +309,8 @@ def simulate_cardiovascular_system(params: CardiovascularParameters,
     n = [1.9, 21.9]
     E = phi1(t, HR, alpha, n)
     
-    # Ventricular elastances
-    Emaxlv = 2.7
-    Eminlv = 0.06
-    Emaxrv = 1.6
-    Eminrv = 0.08
+    # Ventricular elastances from parameters (not hardcoded!)
+    # Emaxlv, Eminlv, Emaxrv, Eminrv are now function parameters
     
     # Initialize arrays
     results = {
