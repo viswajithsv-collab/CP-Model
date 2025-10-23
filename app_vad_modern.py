@@ -23,11 +23,11 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Modern Dark Theme CSS
+# Modern Medical Theme CSS
 st.markdown("""
 <style>
     .main {
-        background: linear-gradient(135deg, #0a0e27 0%, #1a1d3a 100%);
+        background: linear-gradient(135deg, #1a1f35 0%, #0d1117 100%);
         padding: 10px;
     }
     
@@ -43,14 +43,14 @@ st.markdown("""
     
     /* Modern metrics */
     .stMetric {
-        background: rgba(0, 255, 255, 0.1);
+        background: rgba(0, 200, 255, 0.1);
         padding: 10px;
         border-radius: 10px;
-        border-left: 3px solid #00ffff;
+        border-left: 3px solid #00c8ff;
     }
     
     .stMetric label {
-        color: #00ffff !important;
+        color: #00c8ff !important;
         font-size: 12px !important;
         font-weight: 600 !important;
     }
@@ -63,19 +63,19 @@ st.markdown("""
     
     /* Sliders */
     .stSlider > div > div > div > div {
-        background: linear-gradient(90deg, #ff006e, #00ffff);
+        background: linear-gradient(90deg, #0099ff, #00ff88);
     }
     
     /* Headers */
     h1, h2, h3, h4 {
-        color: #00ffff;
+        color: #00c8ff;
         font-family: 'Segoe UI', sans-serif;
         letter-spacing: 1px;
     }
     
     /* Toggle switches */
     .stCheckbox {
-        color: #00ffff;
+        color: #00c8ff;
     }
     
     /* Number inputs */
@@ -87,7 +87,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Title with modern styling
-st.markdown("<h1 style='text-align: center; margin: 0; padding: 10px; background: linear-gradient(90deg, #ff006e, #00ffff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 36px;'>🫀 VAD SIMULATOR</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; margin: 0; padding: 10px; background: linear-gradient(90deg, #0099ff, #00ff88); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 36px;'>🫀 VAD SIMULATOR</h1>", unsafe_allow_html=True)
 
 # =======================
 # PLAYBACK CONTROLS
@@ -129,6 +129,12 @@ if 'running' not in st.session_state:
     st.session_state['running'] = True
 if 'stopped' not in st.session_state:
     st.session_state['stopped'] = False
+
+# Auto-refresh for continuous scrolling when running
+if st.session_state.get('running', True) and not st.session_state.get('stopped', False):
+    import time
+    time.sleep(0.5)  # Update every 0.5 seconds
+    st.rerun()
 
 st.markdown("---")
 
@@ -185,11 +191,15 @@ if st.session_state.get('running', True) and not st.session_state.get('stopped',
 
     state = CardiovascularState()
 
-    duration = 3.0
-    dt = 0.01  # Increased from 0.005 - fewer points, smoother plots
+    duration = 4.0
+    dt = 0.001  # Small time step for stability!
 
     with st.spinner('🔄 Computing...'):
-        results = simulate_cardiovascular_system(params, state, HR=HR, duration=duration, dt=dt)
+        # Now elastances actually affect the simulation!
+        results = simulate_cardiovascular_system(
+            params, state, HR=HR, duration=duration, dt=dt,
+            Emaxlv=Emaxlv, Emaxrv=Emaxrv
+        )
     
     # Store results in session state for export
     st.session_state['results'] = results
@@ -211,8 +221,8 @@ else:
 # Calculate metrics
 t = results['time']
 
-# Downsample for plotting (plot every 5th point for smoother rendering)
-plot_step = 5
+# Downsample for plotting (plot every 10th point for smoother rendering)
+plot_step = 10  # Increased from 5
 t_plot = t[::plot_step]
 results_plot = {key: val[::plot_step] for key, val in results.items()}
 
