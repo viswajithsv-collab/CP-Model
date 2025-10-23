@@ -155,8 +155,8 @@ with col_heart:
     
     col_h1, col_h2 = st.columns(2)
     with col_h1:
-        Emaxlv = st.slider("💪 LV Contractility", 0.5, 5.0, 2.7, 0.1, format="%.1f")
-        Emaxrv = st.slider("💙 RV Contractility", 0.3, 3.0, 1.6, 0.1, format="%.1f")
+        Emaxlv = st.slider("💪 LV Contractility", 0.5, 5.0, 3.5, 0.1, format="%.1f")
+        Emaxrv = st.slider("💙 RV Contractility", 0.3, 3.0, 1.8, 0.1, format="%.1f")
     with col_h2:
         aortic_stenosis = st.slider("🔴 Aortic Stenosis", 0.0, 1.0, 0.0, 0.1)
         mitral_regurg = st.slider("🔵 Mitral Regurg", 0.0, 1.0, 0.0, 0.1)
@@ -169,7 +169,7 @@ with col_vitals:
         HR = st.slider("💗 Heart Rate", 40, 180, 75, 5)
         TBV = st.slider("🩸 Blood Volume", 3000, 7000, 5300, 100, format="%d ml")
     with col_v2:
-        Rsa = st.slider("🌡️ Sys Resistance", 0.02, 0.15, 0.06, 0.01, format="%.3f")
+        Rsa = st.slider("🌡️ Sys Resistance", 0.02, 0.25, 0.10, 0.01, format="%.3f")
         Csa = st.slider("💨 Sys Compliance", 0.1, 0.5, 0.28, 0.02, format="%.2f")
 
 st.markdown("---")
@@ -185,7 +185,7 @@ if st.session_state.get('running', True) and not st.session_state.get('stopped',
 
     state = CardiovascularState()
 
-    duration = 4.0
+    duration = 30.0  # 30 seconds - longer window!
     dt = 0.001  # Small time step for stability!
 
     with st.spinner('🔄 Computing...'):
