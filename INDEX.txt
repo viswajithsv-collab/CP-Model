@@ -1,0 +1,435 @@
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                     📁 VAD SIMULATOR - FILE INDEX 📁                      ║
+║                    Quick Guide to All Your Files                          ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+═══════════════════════════════════════════════════════════════════════════
+🚀 START HERE!
+═══════════════════════════════════════════════════════════════════════════
+
+1. 📖 README.md
+   └─> Comprehensive overview of the new interface
+   └─> Features, usage, design philosophy
+   └─> READ THIS FIRST for full understanding
+   └─> Best for: Getting the big picture
+
+2. 🎯 QUICK_START.txt
+   └─> Visual guide with ASCII art layout diagrams
+   └─> Step-by-step usage instructions
+   └─> Example scenarios and pro tips
+   └─> Best for: Learning how to use the interface
+
+3. 📊 PROJECT_SUMMARY.txt
+   └─> High-level summary of what you got
+   └─> Mission accomplished checklist
+   └─> Quick start instructions
+   └─> Best for: Quick reference
+
+═══════════════════════════════════════════════════════════════════════════
+💻 CODE FILES (Run These!)
+═══════════════════════════════════════════════════════════════════════════
+
+4. ⭐ app_vad_single_plot.py
+   └─> THE NEW VERSION - Your main application!
+   └─> Single plot interface with signal selector
+   └─> This is what you asked for!
+   └─> Run with: streamlit run app_vad_single_plot.py
+
+5. 🫀 cardiovascular_model.py
+   └─> Heart simulation engine
+   └─> Mathematical model of circulation
+   └─> Called by app_vad_single_plot.py
+   └─> (No need to run directly)
+
+6. 📦 requirements.txt
+   └─> Python package dependencies
+   └─> Install with: pip install -r requirements.txt
+   └─> Contains: streamlit, numpy, plotly, pandas
+
+═══════════════════════════════════════════════════════════════════════════
+📚 DOCUMENTATION FILES (Read These!)
+═══════════════════════════════════════════════════════════════════════════
+
+7. 🔍 BEFORE_AFTER_COMPARISON.txt
+   └─> Visual comparison of old vs new interface
+   └─> Screen space analysis
+   └─> Interaction comparison
+   └─> Performance comparison
+   └─> Best for: Understanding the improvements
+
+8. 🔧 TECHNICAL_CHANGELOG.md
+   └─> Code-level changes explained
+   └─> Architecture differences
+   └─> Session state additions
+   └─> Layout transformation details
+   └─> Best for: Developers/programmers
+
+9. 📋 INDEX.txt (This File)
+   └─> Navigation guide for all files
+   └─> Quick reference to find what you need
+   └─> You are here! ⬅️
+
+═══════════════════════════════════════════════════════════════════════════
+📖 READING ORDER RECOMMENDATIONS
+═══════════════════════════════════════════════════════════════════════════
+
+🎓 FOR USERS (Non-technical):
+   1. PROJECT_SUMMARY.txt      (5 min) - What you got
+   2. QUICK_START.txt          (10 min) - How to use it
+   3. BEFORE_AFTER_COMPARISON  (5 min) - See the improvements
+   4. README.md                (15 min) - Full details
+   5. Run app_vad_single_plot.py and explore!
+
+💻 FOR DEVELOPERS:
+   1. PROJECT_SUMMARY.txt          (5 min) - Overview
+   2. TECHNICAL_CHANGELOG.md       (20 min) - Code changes
+   3. app_vad_single_plot.py       (30 min) - Read the code
+   4. BEFORE_AFTER_COMPARISON.txt  (5 min) - Design decisions
+   5. README.md                    (10 min) - Feature details
+
+🏥 FOR MEDICAL/CLINICAL USERS:
+   1. QUICK_START.txt              (10 min) - How to use
+   2. README.md                    (15 min) - Scenarios
+   3. Run the app and try scenarios from QUICK_START.txt
+   4. PROJECT_SUMMARY.txt          (5 min) - Reference
+
+🎓 FOR TEACHERS/EDUCATORS:
+   1. README.md                    (15 min) - Full overview
+   2. QUICK_START.txt              (10 min) - Teaching scenarios
+   3. BEFORE_AFTER_COMPARISON.txt  (5 min) - Show improvements
+   4. Prepare demo using app_vad_single_plot.py
+
+═══════════════════════════════════════════════════════════════════════════
+🎯 QUICK REFERENCE: WHAT FILE FOR WHAT PURPOSE?
+═══════════════════════════════════════════════════════════════════════════
+
+┌───────────────────────────────────┬───────────────────────────────────┐
+│ Need...                           │ Read This File...                 │
+├───────────────────────────────────┼───────────────────────────────────┤
+│ Quick overview                    │ PROJECT_SUMMARY.txt               │
+│ How to use the interface          │ QUICK_START.txt                   │
+│ See what changed                  │ BEFORE_AFTER_COMPARISON.txt       │
+│ Understand code changes           │ TECHNICAL_CHANGELOG.md            │
+│ Complete documentation            │ README.md                         │
+│ Install instructions              │ README.md or PROJECT_SUMMARY.txt  │
+│ Troubleshooting                   │ QUICK_START.txt or README.md      │
+│ Example scenarios                 │ QUICK_START.txt or README.md      │
+│ Signal descriptions               │ QUICK_START.txt or README.md      │
+│ Navigation help                   │ INDEX.txt (this file!)            │
+│ Package requirements              │ requirements.txt                  │
+└───────────────────────────────────┴───────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════
+📊 FILE DETAILS
+═══════════════════════════════════════════════════════════════════════════
+
+┌────────────────────────────────┬────────┬──────────┬──────────────────┐
+│ Filename                       │ Lines  │ Size     │ Type             │
+├────────────────────────────────┼────────┼──────────┼──────────────────┤
+│ app_vad_single_plot.py         │ 592    │ ~18 KB   │ Python Code      │
+│ cardiovascular_model.py        │ ~400   │ ~13 KB   │ Python Code      │
+│ requirements.txt               │ 4      │ ~61 B    │ Text             │
+│ README.md                      │ ~320   │ ~12 KB   │ Markdown         │
+│ QUICK_START.txt                │ ~280   │ ~11 KB   │ Text (ASCII art) │
+│ PROJECT_SUMMARY.txt            │ ~240   │ ~9 KB    │ Text             │
+│ BEFORE_AFTER_COMPARISON.txt    │ ~400   │ ~16 KB   │ Text (ASCII art) │
+│ TECHNICAL_CHANGELOG.md         │ ~500   │ ~18 KB   │ Markdown         │
+│ INDEX.txt (this file)          │ ~300   │ ~11 KB   │ Text             │
+└────────────────────────────────┴────────┴──────────┴──────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════
+⚡ QUICK START - JUST WANT TO RUN IT?
+═══════════════════════════════════════════════════════════════════════════
+
+Step 1: Install dependencies
+   $ pip install -r requirements.txt
+
+Step 2: Run the app
+   $ streamlit run app_vad_single_plot.py
+
+Step 3: Open browser
+   → http://localhost:8501
+
+Step 4: Read QUICK_START.txt to learn how to use it!
+
+═══════════════════════════════════════════════════════════════════════════
+📋 FILE CONTENTS SUMMARY
+═══════════════════════════════════════════════════════════════════════════
+
+README.md:
+├─ Introduction
+├─ Key Features
+├─ Files Included
+├─ How to Run
+├─ How to Use
+├─ What Works Great
+├─ Design Philosophy
+├─ Signal Descriptions
+├─ Medical Accuracy
+├─ Tips
+├─ Comparison: Old vs New
+├─ Use Cases
+├─ Customization
+└─ Future Enhancements
+
+QUICK_START.txt:
+├─ What Changed - At a Glance
+├─ Main Controls
+├─ Signal Selector Buttons
+├─ Left Panel Controls
+├─ How to Use - Workflow
+├─ Hemodynamic Metrics
+├─ Data Export
+├─ Example Scenarios
+├─ Visual Guide (ASCII art)
+├─ Pro Tips
+├─ Getting Started
+└─ Troubleshooting
+
+PROJECT_SUMMARY.txt:
+├─ What You Have
+├─ Mission Accomplished
+├─ Quick Start
+├─ New Interface Layout
+├─ Available Signals
+├─ Key Improvements
+├─ What Works Perfectly
+├─ How to Use - Step by Step
+├─ Educational Scenarios
+├─ Metrics Explained
+├─ Troubleshooting
+├─ Documentation Files
+└─ Use Cases
+
+BEFORE_AFTER_COMPARISON.txt:
+├─ Visual Comparison (ASCII diagrams)
+├─ Old Version Layout
+├─ New Version Layout
+├─ Side-by-Side Comparison Table
+├─ Screen Space Comparison
+├─ Interaction Comparison
+├─ Readability Comparison
+├─ Use Case Comparison
+├─ Performance Comparison
+└─ Final Verdict
+
+TECHNICAL_CHANGELOG.md:
+├─ Code Architecture Changes
+├─ Session State Additions
+├─ Layout Transformation
+├─ Signal Selector Implementation
+├─ Scrolling Window System
+├─ Conditional Plotting Logic
+├─ Plot Sizing Changes
+├─ Metrics Display Reorganization
+├─ Control Panel Consolidation
+├─ Display Controls Section
+├─ PV Loop Handling Change
+├─ Color Scheme Consistency
+├─ Removed Elements
+├─ Performance Considerations
+├─ CSS Styling Additions
+├─ Key Functions Unchanged
+├─ Signal-Specific Plot Configurations
+├─ Plot Update Pattern
+├─ State Management
+└─ Future Extensibility
+
+═══════════════════════════════════════════════════════════════════════════
+💡 TIPS FOR NAVIGATING
+═══════════════════════════════════════════════════════════════════════════
+
+Text Files (.txt):
+   • Open in any text editor
+   • Monospace font recommended for ASCII art
+   • Best viewed at 80+ character width
+
+Markdown Files (.md):
+   • Open in markdown viewer or text editor
+   • GitHub/VS Code have built-in markdown preview
+   • Renders nicely with formatting
+
+Python Files (.py):
+   • Open in code editor (VS Code, PyCharm, etc.)
+   • Use syntax highlighting for better readability
+   • Don't edit unless you know Python!
+
+═══════════════════════════════════════════════════════════════════════════
+🔍 SEARCH GUIDE
+═══════════════════════════════════════════════════════════════════════════
+
+Looking for specific information? Search for these keywords:
+
+Signals:         README.md, QUICK_START.txt
+Installation:    README.md, PROJECT_SUMMARY.txt
+Troubleshooting: QUICK_START.txt, README.md
+Performance:     BEFORE_AFTER_COMPARISON.txt, TECHNICAL_CHANGELOG.md
+Code changes:    TECHNICAL_CHANGELOG.md
+Layout:          BEFORE_AFTER_COMPARISON.txt, QUICK_START.txt
+Scenarios:       QUICK_START.txt, README.md
+Metrics:         QUICK_START.txt, PROJECT_SUMMARY.txt
+Export:          README.md, QUICK_START.txt
+Controls:        QUICK_START.txt, README.md
+
+═══════════════════════════════════════════════════════════════════════════
+📞 NEED HELP?
+═══════════════════════════════════════════════════════════════════════════
+
+Problem: Don't know where to start
+Solution: Read PROJECT_SUMMARY.txt first (5 minutes)
+
+Problem: Want to use the app right away
+Solution: Skip to "Quick Start" section above
+
+Problem: Need technical details
+Solution: Read TECHNICAL_CHANGELOG.md
+
+Problem: Want to understand what changed
+Solution: Read BEFORE_AFTER_COMPARISON.txt
+
+Problem: App not working
+Solution: Check QUICK_START.txt troubleshooting section
+
+Problem: Lost in documentation
+Solution: You're reading the right file (INDEX.txt)!
+
+═══════════════════════════════════════════════════════════════════════════
+✅ CHECKLIST: WHAT TO DO WITH EACH FILE
+═══════════════════════════════════════════════════════════════════════════
+
+□ app_vad_single_plot.py       → Run this!
+□ cardiovascular_model.py      → Keep in same folder as above
+□ requirements.txt             → Install packages from this
+□ README.md                    → Read for full understanding
+□ QUICK_START.txt              → Read for usage guide
+□ PROJECT_SUMMARY.txt          → Read for quick overview
+□ BEFORE_AFTER_COMPARISON.txt  → Read to see improvements
+□ TECHNICAL_CHANGELOG.md       → Read if interested in code
+□ INDEX.txt                    → You're reading it now! ✓
+
+═══════════════════════════════════════════════════════════════════════════
+🎨 VISUAL FILES GUIDE
+═══════════════════════════════════════════════════════════════════════════
+
+Files with ASCII art diagrams:
+   • QUICK_START.txt            (interface layout, workflow)
+   • BEFORE_AFTER_COMPARISON.txt (before/after layouts)
+   • PROJECT_SUMMARY.txt         (compact layout diagram)
+
+Best viewed with:
+   • Monospace font (Courier, Consolas, Monaco)
+   • 80+ character width
+   • No word wrap
+   • Dark or light theme (your preference)
+
+═══════════════════════════════════════════════════════════════════════════
+📊 CONTENT SUMMARY BY TOPIC
+═══════════════════════════════════════════════════════════════════════════
+
+Interface Layout:
+   → BEFORE_AFTER_COMPARISON.txt (detailed diagrams)
+   → QUICK_START.txt (usage-focused)
+   → README.md (description)
+
+How to Use:
+   → QUICK_START.txt (comprehensive guide)
+   → README.md (detailed)
+   → PROJECT_SUMMARY.txt (brief)
+
+What Changed:
+   → BEFORE_AFTER_COMPARISON.txt (user perspective)
+   → TECHNICAL_CHANGELOG.md (code perspective)
+   → PROJECT_SUMMARY.txt (high-level)
+
+Code Details:
+   → TECHNICAL_CHANGELOG.md (complete)
+   → app_vad_single_plot.py (actual code)
+   → README.md (some details)
+
+Troubleshooting:
+   → QUICK_START.txt (common issues)
+   → README.md (notes section)
+
+Examples/Scenarios:
+   → QUICK_START.txt (7 detailed scenarios)
+   → README.md (use cases)
+   → PROJECT_SUMMARY.txt (5 scenarios)
+
+═══════════════════════════════════════════════════════════════════════════
+⭐ HIGHLIGHTS - DON'T MISS THESE!
+═══════════════════════════════════════════════════════════════════════════
+
+1. Visual before/after diagrams in BEFORE_AFTER_COMPARISON.txt
+   └─> See exactly how the interface improved
+
+2. Example scenarios in QUICK_START.txt
+   └─> Try these to learn the system
+
+3. Signal descriptions in QUICK_START.txt and README.md
+   └─> Understand what each signal means
+
+4. Pro tips in QUICK_START.txt
+   └─> Get the most out of the simulator
+
+5. Technical details in TECHNICAL_CHANGELOG.md
+   └─> Learn about the code changes
+
+═══════════════════════════════════════════════════════════════════════════
+🎓 LEARNING PATH
+═══════════════════════════════════════════════════════════════════════════
+
+Beginner:
+   Day 1: PROJECT_SUMMARY.txt → Install → Run app
+   Day 2: QUICK_START.txt → Try basic scenarios
+   Day 3: README.md → Learn all features
+   Day 4: BEFORE_AFTER_COMPARISON.txt → Appreciate design
+
+Intermediate:
+   Hour 1: PROJECT_SUMMARY.txt + QUICK_START.txt
+   Hour 2: Install and run app, try scenarios
+   Hour 3: README.md for deep dive
+   Hour 4: Experiment with all controls
+
+Advanced:
+   30 min: PROJECT_SUMMARY.txt overview
+   30 min: Install, run, explore
+   1 hour: TECHNICAL_CHANGELOG.md
+   1 hour: Read app_vad_single_plot.py code
+   Ongoing: Customize and extend
+
+═══════════════════════════════════════════════════════════════════════════
+📝 NOTES
+═══════════════════════════════════════════════════════════════════════════
+
+• All files are in plain text format (easy to open anywhere)
+• No external dependencies for documentation
+• Code files require Python + packages from requirements.txt
+• Documentation is complete and self-contained
+• You have everything you need to run and understand the simulator
+
+═══════════════════════════════════════════════════════════════════════════
+🎉 CONGRATULATIONS!
+═══════════════════════════════════════════════════════════════════════════
+
+You now have:
+   ✅ A fully functional VAD simulator
+   ✅ Single-plot interface with signal selector
+   ✅ Comprehensive documentation
+   ✅ User guides and technical details
+   ✅ Example scenarios
+   ✅ Everything well-organized
+
+Next steps:
+   1. Run app_vad_single_plot.py
+   2. Read QUICK_START.txt while using it
+   3. Try the example scenarios
+   4. Explore and learn!
+
+═══════════════════════════════════════════════════════════════════════════
+
+              🫀 Enjoy your new VAD Simulator! 🫀
+                 Everything you need is here!
+
+═══════════════════════════════════════════════════════════════════════════
+
+END OF INDEX
