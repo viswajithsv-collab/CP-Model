@@ -127,6 +127,17 @@ st.markdown("""
 st.markdown("<h1 class='main-title'>Cardiovascular Simulator</h1>", unsafe_allow_html=True)
 
 # =======================
+# DEFINE PARAMETERS FIRST (before buttons need them)
+# =======================
+# Get parameters from sliders with defaults
+Emaxlv = 2.0
+Emaxrv = 1.2
+HR = 75
+TBV = 5300
+Rsa = 0.20
+Csa = 0.28
+
+# =======================
 # TOP BUTTON ROW
 # =======================
 btn1, btn2, btn3, btn4, btn5, btn6 = st.columns(6)
@@ -182,7 +193,7 @@ with btn4:
         st.download_button(
             label="💾 Save Data",
             data=csv,
-            file_name=f"cardiovascular_data_{st.session_state['current_time']:.0f}s.csv",
+            file_name=f"cardiovascular_data_{st.session_state.get('current_time', 0):.0f}s.csv",
             mime="text/csv",
             use_container_width=True
         )
@@ -190,26 +201,25 @@ with btn4:
         st.button("💾 Save Data", use_container_width=True, disabled=True)
 
 with btn5:
-    # Download Params button - export JSON
-    if 'params' in st.session_state or True:  # Always available
-        params_dict = {
-            'HR': HR,
-            'TBV': TBV,
-            'Rsa': Rsa,
-            'Csa': Csa,
-            'Emaxlv': Emaxlv,
-            'Emaxrv': Emaxrv,
-            'window_size': st.session_state.get('window_size', 10),
-            'selected_signal': st.session_state.get('selected_signal', 'LVP')
-        }
-        params_json = json.dumps(params_dict, indent=2)
-        st.download_button(
-            label="📥 Download Params",
-            data=params_json,
-            file_name="cardiovascular_params.json",
-            mime="application/json",
-            use_container_width=True
-        )
+    # Download Params button - uses default values initially
+    params_dict = {
+        'HR': st.session_state.get('param_HR', HR),
+        'TBV': st.session_state.get('param_TBV', TBV),
+        'Rsa': st.session_state.get('param_Rsa', Rsa),
+        'Csa': st.session_state.get('param_Csa', Csa),
+        'Emaxlv': st.session_state.get('param_Emaxlv', Emaxlv),
+        'Emaxrv': st.session_state.get('param_Emaxrv', Emaxrv),
+        'window_size': st.session_state.get('window_size', 10),
+        'selected_signal': st.session_state.get('selected_signal', 'LVP')
+    }
+    params_json = json.dumps(params_dict, indent=2)
+    st.download_button(
+        label="📥 Download Params",
+        data=params_json,
+        file_name="cardiovascular_params.json",
+        mime="application/json",
+        use_container_width=True
+    )
 
 with btn6:
     # Save Plots button - info for now
@@ -241,21 +251,27 @@ with col_left:
     
     st.markdown("**💪 LV Contractility**")
     Emaxlv = st.slider("", 0.5, 2.7, 2.0, 0.1, format="%.1f", key="emaxlv", label_visibility="collapsed")
+    st.session_state['param_Emaxlv'] = Emaxlv
     
     st.markdown("**💙 RV Contractility**")
     Emaxrv = st.slider("", 0.5, 2.0, 1.2, 0.1, format="%.1f", key="emaxrv", label_visibility="collapsed")
+    st.session_state['param_Emaxrv'] = Emaxrv
     
     st.markdown("**💗 Heart Rate**")
     HR = st.slider("", 40, 180, 75, 5, key="hr", label_visibility="collapsed")
+    st.session_state['param_HR'] = HR
     
     st.markdown("**🩸 Blood Volume**")
     TBV = st.slider("", 3000, 7000, 5300, 100, key="tbv", label_visibility="collapsed")
+    st.session_state['param_TBV'] = TBV
     
     st.markdown("**🌡️ Resistance**")
     Rsa = st.slider("", 0.05, 0.30, 0.20, 0.01, format="%.2f", key="rsa", label_visibility="collapsed")
+    st.session_state['param_Rsa'] = Rsa
     
     st.markdown("**💨 Compliance**")
     Csa = st.slider("", 0.1, 0.5, 0.28, 0.02, format="%.2f", key="csa", label_visibility="collapsed")
+    st.session_state['param_Csa'] = Csa
 
 # =======================
 # CENTER - REAL-TIME PLOT
@@ -538,4 +554,3 @@ with col_right:
     if st.button("🩸 Arterial", use_container_width=True, type="primary" if st.session_state['selected_signal'] == 'Arterial' else "secondary"):
         st.session_state['selected_signal'] = 'Arterial'
         st.rerun()
-
