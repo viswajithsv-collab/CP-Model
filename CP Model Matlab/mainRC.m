@@ -22,7 +22,9 @@ n = [1.9,21.9];
 E = phi1(t,HR,alpha,n);
 
 Emaxlv = 2.7;
+Eminlv = 0.06;
 Emaxrv = 1.6;
+Eminlv = 0.08;
 
 for i = 1:length(t)-1
 %----------------------------Heart------------------------------------------
@@ -35,10 +37,11 @@ for i = 1:length(t)-1
     Pra(i+1) = Pra(i) + dPra(i)*h;
 
     %Left Ventricle
-    [Vlv(i+1),Plv(i+1),Plvmax(i+1),Rlv(i+1)] = ventricle(Emaxlv,E(i),Vlv(i),Vulv,Qmv(i),Qao(i),krlv,kelv,P0lv,h);
+    [Vlv(i+1),Plv(i+1)] = ventricle1(Emaxlv,Eminlv,E(i),LVV(i),Vulv,Qmv(i),Qaov(i),h);
 
     %Right Ventricle
-    [Vrv(i+1),Prv(i+1),Prvmax(i+1),Rrv(i+1)] = ventricle(Emaxrv,E(i),Vrv(i),Vurv,Qtv(i),Qpu(i),krrv,kerv,P0rv,h);
+    [Vrv(i+1),Prv(i+1)] = ventricle1(Emaxrv,Eminrv,E(i),RVV(i),Vurv,Qtv(i),Qpulv(i),h);
+
 
 %--------------------------------------------------------------------------
 
