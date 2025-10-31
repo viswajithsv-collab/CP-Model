@@ -134,7 +134,7 @@ results2 = table(Values2,Units2,'RowNames',VariableNames2)
 
 %---Part A Scenario 4------------------------------------
 % Set in Constants file Vudv as 121 and Vuev = 50. Now increase (steps of 100ml each separately)
-% either one to see where Pdv falls below 8mmHg.
+% either one to see where mPdv falls below 8mmHg.
 
 sPdv = max(Pdv(end-8001:end));
 dPdv = min(Pdv(end-8001:end));
@@ -146,6 +146,7 @@ Units3 = {'mmHg';'mmHg';'mmHg'};
 
 results3 = table(Values3,Units3,'RowNames',VariableNames3)
 plot(t,Psa)
+
 
 
 
