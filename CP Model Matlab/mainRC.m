@@ -21,10 +21,8 @@ alpha = [0.103,0.408];
 n = [1.9,21.9];
 E = phi1(t,HR,alpha,n);
 
-Emaxlv = 2.7;
-Eminlv = 0.06;
-Emaxrv = 1.6;
-Eminlv = 0.08;
+Emaxlv = 2.4;  %Use Emaxlv = 1.2 for unhealthy in Part A Scenario 2
+Emaxrv = 1.8;
 
 for i = 1:length(t)-1
 %----------------------------Heart------------------------------------------
@@ -37,11 +35,10 @@ for i = 1:length(t)-1
     Pra(i+1) = Pra(i) + dPra(i)*h;
 
     %Left Ventricle
-    [Vlv(i+1),Plv(i+1)] = ventricle1(Emaxlv,Eminlv,E(i),LVV(i),Vulv,Qmv(i),Qaov(i),h);
+    [Vlv(i+1),Plv(i+1),Plvmax(i+1),Rlv(i+1)] = ventricle(Emaxlv,E(i),Vlv(i),Vulv,Qmv(i),Qao(i),krlv,kelv,P0lv,h);
 
     %Right Ventricle
-    [Vrv(i+1),Prv(i+1)] = ventricle1(Emaxrv,Eminrv,E(i),RVV(i),Vurv,Qtv(i),Qpulv(i),h);
-
+    [Vrv(i+1),Prv(i+1),Prvmax(i+1),Rrv(i+1)] = ventricle(Emaxrv,E(i),Vrv(i),Vurv,Qtv(i),Qpu(i),krrv,kerv,P0rv,h);
 
 %--------------------------------------------------------------------------
 
@@ -88,7 +85,7 @@ for i = 1:length(t)-1
 %---------------------------------------------------------------------------
 
  %Unstressed Volume
-    Vu = Vusa + Vusvb + Vuevb + Vumvb + Vubvb + Vuhvb + Vusv + Vuev + Vumv + Vubv + Vuhv + Vura + Vupa + Vupvb + Vupv + Vula;
+    Vu = Vusa + Vudp + Vuep + Vump + Vubp + Vuhp + Vudv + Vuev + Vumv + Vubv + Vuhv + Vura + Vupa + Vupvb + Vupv + Vula;
 
     %EOther Venous Circulation
     Vnet(i+1) = Csa*Psa(i+1) + (Csvb+Cevb+Cmvb+Cbvb+Chvb)*Psp(i+1) + Csv*Pdv(i+1) + Cmv*Pmv(i+1) + Cbv*Pbv(i+1) + Chv*Phv(i+1) + Cra*Pra(i+1) + Vrv(i+1) + Cpa*Ppa(i+1) + Cpvb*Ppp(i+1) + Cpv*Ppv(i+1) + Cla*Pla(i+1) + Vlv(i+1) + Vu;
@@ -100,3 +97,38 @@ for i = 1:length(t)-1
     Qtv(i+1) = valves(Pra(i+1),Prv(i+1),Rra+Rtv);
     Qpu(i+1) = valves(Prvmax(i+1),Ppa(i+1),Rrv(i+1)+Rpulv);
 end
+
+%---------------------------------------------------------------------------
+
+%---Part A Scenario 1-------------------------------------
+LVEDV = max(Vlv(end-8001:end));
+LVESV = min(Vlv(end-8001:end));
+SV = LVEDV - LVESV;
+CO = SV*HR/1000;
+pulp = max(Pbv(end-8001:end))-min(Pbv(end-8001:end));
+
+VariableNames = {'LVEDV'; 'LVESV'; 'SV'; 'CO';'PP_UB'};
+Values = [LVEDV; LVESV; SV; CO; pulp];
+Units = {'mL'; 'mL'; 'mL'; 'L/min'; 'mmHg'};
+
+results = table(Values, Units, 'RowNames', VariableNames)
+
+%---Part A Scenario 2--------------------------------------
+SBP = max(Psa(end-8001:end));
+DBP = min(Psa(end-8001:end));
+EF = SV*100/LVEDV;
+
+VariableNames2 = {'SBP';'DBP';'CO';'EF'};
+Values2 = [SBP;DBP;CO;EF];
+Units2 = {'mmHg';'mmHg';'L/min';'%'};
+
+results2 = table(Values2,Units2,'RowNames',VariableNames2)
+
+%---Part A Scenario 3------------------------------------
+% Use CO from above and plot R_SA vs CO
+
+%---Part A Scenario 4------------------------------------
+% Set in Constants file Vudv as 121 and Vuev = 50. Now increase
+% either one to see where Pdv falls below 8mmHg.
+plot(t,Pdv)
+
