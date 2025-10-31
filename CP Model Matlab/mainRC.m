@@ -37,7 +37,7 @@ for i = 1:length(t)-1
     Pra(i+1) = Pra(i) + dPra(i)*h;
 
     %Left Ventricle
-    %[Vlv(i+1),Plv(i+1)] = ventricle(Emaxlv,Eminlv,E(i),Vlv(i),Vulv,Qmv(i),Qao(i),h);
+    [Vlv(i+1),Plv(i+1)] = ventricle(Emaxlv,Eminlv,E(i),Vlv(i),Vulv,Qmv(i),Qao(i),h);
 
     %Right Ventricle
     [Vrv(i+1),Prv(i+1)] = ventricle(Emaxrv,Eminrv,E(i),Vrv(i),Vurv,Qtv(i),Qpu(i),h);
@@ -146,6 +146,7 @@ Units3 = {'mmHg';'mmHg';'mmHg'};
 
 results3 = table(Values3,Units3,'RowNames',VariableNames3)
 plot(t,Psa)
+
 
 
 
