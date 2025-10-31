@@ -95,9 +95,9 @@ for i = 1:length(t)-1
 
 %Valves
     Qmv(i+1) = valves(Pla(i+1),Plv(i+1),Rla+Rmv);
-    Qao(i+1) = valves(Plvmax(i+1),Psa(i+1),Rlv(i+1)+Raov);
+    Qao(i+1) = valves(Plv(i+1),Psa(i+1),Raov);
     Qtv(i+1) = valves(Pra(i+1),Prv(i+1),Rra+Rtv);
-    Qpu(i+1) = valves(Prvmax(i+1),Ppa(i+1),Rrv(i+1)+Rpulv);
+    Qpu(i+1) = valves(Prv(i+1),Ppa(i+1),Rpulv);
 end
 
 %---------------------------------------------------------------------------
@@ -146,6 +146,7 @@ Units3 = {'mmHg';'mmHg';'mmHg'};
 
 results3 = table(Values3,Units3,'RowNames',VariableNames3)
 plot(t,Psa)
+
 
 
 
