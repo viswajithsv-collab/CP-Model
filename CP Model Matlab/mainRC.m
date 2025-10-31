@@ -79,10 +79,10 @@ for i = 1:length(t)-1
     dPpa = pulmonaryArtery(Qpu(i),Ppa(i),Ppp(i),Rpa,Cpa);
     Ppa(i+1) = Ppa(i)+dPpa*h;
     %Pulmonary Vascular bed
-    dPpp = pulmonaryVascular(Ppa(i),Ppp(i),Ppv(i),Rpa,Rpvb,Cpvb);
+    dPpp = pulmonaryVascular(Ppa(i),Ppp(i),Ppv(i),Rpa,Rpp,Cpvb);
     Ppp(i+1) = Ppp(i)+dPpp*h;
     %Pulmonary Veins
-    dPpv = pulmonaryVeins(Ppp(i),Ppv(i),Pla(i),Rpvb,Rpv,Cpv);
+    dPpv = pulmonaryVeins(Ppp(i),Ppv(i),Pla(i),Rpp,Rpv,Cpv);
     Ppv(i+1) = Ppv(i)+dPpv*h;
 %---------------------------------------------------------------------------
 
@@ -146,5 +146,6 @@ Units3 = {'mmHg';'mmHg';'mmHg'};
 
 results3 = table(Values3,Units3,'RowNames',VariableNames3)
 plot(t,Psa)
+
 
 
