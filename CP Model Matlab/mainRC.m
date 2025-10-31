@@ -22,7 +22,9 @@ n = [1.9,21.9];
 E = phi1(t,HR,alpha,n);
 
 Emaxlv = 2.4;  %Use Emaxlv = 1.2 for unhealthy in Part A Scenario 2
+Eminlv = 0.06;
 Emaxrv = 1.8;
+Eminrv = 0.08;
 
 for i = 1:length(t)-1
 %----------------------------Heart------------------------------------------
@@ -35,10 +37,10 @@ for i = 1:length(t)-1
     Pra(i+1) = Pra(i) + dPra(i)*h;
 
     %Left Ventricle
-    [Vlv(i+1),Plv(i+1),Plvmax(i+1),Rlv(i+1)] = ventricle(Emaxlv,E(i),Vlv(i),Vulv,Qmv(i),Qao(i),krlv,kelv,P0lv,h);
+    %[Vlv(i+1),Plv(i+1)] = ventricle1(Emaxlv,Eminlv,E(i),Vlv(i),Vulv,Qmv(i),Qao(i),h);
 
     %Right Ventricle
-    [Vrv(i+1),Prv(i+1),Prvmax(i+1),Rrv(i+1)] = ventricle(Emaxrv,E(i),Vrv(i),Vurv,Qtv(i),Qpu(i),krrv,kerv,P0rv,h);
+    [Vrv(i+1),Prv(i+1)] = ventricle1(Emaxrv,Eminrv,E(i),Vrv(i),Vurv,Qtv(i),Qpu(i),h);
 
 %--------------------------------------------------------------------------
 
@@ -101,6 +103,7 @@ end
 %---------------------------------------------------------------------------
 
 %---Part A Scenario 1-------------------------------------
+%In constants please change Rpa from 0.023 to 0.046 (first) and then try increasing Rpa till yu get CO<4 (jump Rpa as 5x, 10x, 20x and so om) do this part.
 LVEDV = max(Vlv(end-8001:end));
 LVESV = min(Vlv(end-8001:end));
 SV = LVEDV - LVESV;
@@ -114,6 +117,8 @@ Units = {'mL'; 'mL'; 'mL'; 'L/min'; 'mmHg'};
 results = table(Values, Units, 'RowNames', VariableNames)
 
 %---Part A Scenario 2--------------------------------------
+% First plot by changing Emaxlv, the Psa. Next plot CO, SBP and DBP
+% while changing TBV in constants.
 SBP = max(Psa(end-8001:end));
 DBP = min(Psa(end-8001:end));
 EF = SV*100/LVEDV;
@@ -125,10 +130,20 @@ Units2 = {'mmHg';'mmHg';'L/min';'%'};
 results2 = table(Values2,Units2,'RowNames',VariableNames2)
 
 %---Part A Scenario 3------------------------------------
-% Use CO from above and plot R_SA vs CO
+% Use CO from above and plot R_SA vs CO while changing Rsa (from 0.25x to 1.75x) in Constants.
 
 %---Part A Scenario 4------------------------------------
-% Set in Constants file Vudv as 121 and Vuev = 50. Now increase
+% Set in Constants file Vudv as 121 and Vuev = 50. Now increase (steps of 100ml each separately)
 % either one to see where Pdv falls below 8mmHg.
-plot(t,Pdv)
+
+sPdv = max(Pdv(end-8001:end));
+dPdv = min(Pdv(end-8001:end));
+mPdv = dPdv + (sPdv - dPdv)/3;
+
+VariableNames3 = {'sPdv';'dPdv';'mPdv'};
+Values3 = [sPdv;dPdv;mPdv];
+Units3 = {'mmHg';'mmHg';'mmHg'};
+
+results3 = table(Values3,Units3,'RowNames',VariableNames3)
+plot(t,Psa)
 
